@@ -27,5 +27,11 @@ jobs:
       - name: Build project
         run: dotnet build --configuration Release  # 编译项目
 
-      - name: Publish project (可选)
-        run: dotnet publish --configuration Release --output ./publish  # 发布项目
+      - name: Publish project
+        run: dotnet publish --configuration Release --output ${{ github.workspace }}/output  # 指定输出目录为工作空间中的 output 文件夹
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2  # 上传构建文件到 GitHub Actions
+        with:
+          name: unconfuserex-build
+          path: ${{ github.workspace }}/output  # 上传输出目录中的所有文件
