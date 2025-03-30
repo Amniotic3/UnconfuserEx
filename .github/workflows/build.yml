@@ -3,10 +3,10 @@ name: Build UnconfuserEx
 on:
   push:
     branches:
-      - master  # 触发条件为推送到 main 分支
+      - master  # 修改为 master 分支
   pull_request:
     branches:
-      - master  # 触发条件为提交 Pull Request 到 main 分支
+      - master  # 修改为 master 分支
 
 jobs:
   build:
@@ -28,10 +28,10 @@ jobs:
         run: dotnet build --configuration Release  # 编译项目
 
       - name: Publish project
-        run: dotnet publish --configuration Release --output ${{ github.workspace }}/output  # 指定输出目录为工作空间中的 output 文件夹
+        run: dotnet publish --configuration Release --output ${{ github.workspace }}  # 修改为正确的输出目录
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2  # 上传构建文件到 GitHub Actions
         with:
           name: unconfuserex-build
-          path: ${{ github.workspace }}/output/*  # 指定路径为 output 文件夹中的所有内容
+          path: ${{ github.workspace }}/**  # 确保上传 publish 目录中的所有文件
