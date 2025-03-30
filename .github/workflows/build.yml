@@ -21,9 +21,6 @@ jobs:
         with:
           dotnet-version: '9.0.x'  # 安装 .NET 9.0 SDK
 
-      - name: Clear NuGet cache
-        run: dotnet nuget locals all --clear  # 清理本地 NuGet 缓存
-
       - name: Restore dependencies
         run: dotnet restore  # 恢复 NuGet 依赖项
 
@@ -31,10 +28,10 @@ jobs:
         run: dotnet build --configuration Release  # 编译项目
 
       - name: Publish project to root directory
-        run: dotnet publish --configuration Release --output ${{ github.workspace }}  # 输出到仓库根目录
+        run: dotnet publish --configuration Release --output ${{ github.workspace }}  # 发布项目到仓库根目录
 
       - name: List root directory (用于调试)
-        run: dir ${{ github.workspace }}  # 列出根目录中的文件，用于调试
+        run: dir ${{ github.workspace }}  # 列出根目录中的文件，用于调试，确认发布文件是否存在
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2  # 上传构建文件到 GitHub Actions
