@@ -3,10 +3,10 @@ name: Build UnconfuserEx
 on:
   push:
     branches:
-      - master  # 触发条件为推送到 main 分支
+      - main  # 触发条件为推送到 main 分支
   pull_request:
     branches:
-      - master  # 触发条件为提交 Pull Request 到 main 分支
+      - main  # 触发条件为提交 Pull Request 到 main 分支
 
 jobs:
   build:
@@ -34,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v2  # 上传构建文件到 GitHub Actions
         with:
           name: unconfuserex-build
-          path: ${{ github.workspace }}/output  # 上传输出目录中的所有文件
+          path: ${{ github.workspace }}/output/*  # 指定路径为 output 文件夹中的所有内容
