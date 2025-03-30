@@ -21,6 +21,9 @@ jobs:
         with:
           dotnet-version: '9.0.x'  # 安装 .NET 9.0 SDK
 
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear  # 清理本地 NuGet 缓存
+
       - name: Restore dependencies
         run: dotnet restore  # 恢复 NuGet 依赖项
 
