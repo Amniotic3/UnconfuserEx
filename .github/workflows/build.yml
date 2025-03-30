@@ -3,10 +3,10 @@ name: Build UnconfuserEx
 on:
   push:
     branches:
-      - main  # 触发条件为推送到 main 分支
+      - master  # 触发条件为推送到 main 分支
   pull_request:
     branches:
-      - main  # 触发条件为提交 Pull Request 到 main 分支
+      - master  # 触发条件为提交 Pull Request 到 main 分支
 
 jobs:
   build:
