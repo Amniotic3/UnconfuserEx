@@ -1,0 +1,31 @@
+name: Build UnconfuserEx
+
+on:
+  push:
+    branches:
+      - master  # 触发条件为推送到 main 分支
+  pull_request:
+    branches:
+      - master  # 触发条件为提交 Pull Request 到 main 分支
+
+jobs:
+  build:
+    runs-on: windows-latest  # 使用最新的 Windows 环境
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 检出代码
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'  # 安装 .NET 9.0 SDK
+
+      - name: Restore dependencies
+        run: dotnet restore  # 恢复 NuGet 依赖项
+
+      - name: Build project
+        run: dotnet build --configuration Release  # 编译项目
+
+      - name: Publish project (可选)
+        run: dotnet publish --configuration Release --output ./publish  # 发布项目
