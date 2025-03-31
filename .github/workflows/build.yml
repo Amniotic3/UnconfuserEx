@@ -1,40 +1,41 @@
-name: Build UnconfuserEx
+name: Build and Release
 
 on:
   push:
-    branches:
-      - master  # 触发条件为推送到 master 分支
-  pull_request:
-    branches:
-      - master  # 触发条件为提交 Pull Request 到 master 分支
+    tags:
+      - 'v*'
 
 jobs:
   build:
-    runs-on: windows-latest  # 使用最新的 Windows 环境
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  # 检出代码
+    - uses: actions/checkout@v4
 
-      - name: Set up .NET SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '9.0.x'  # 安装 .NET 9.0 SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore  # 恢复 NuGet 依赖项
+    - name: Restore Dependencies
+      run: dotnet restore UnConfuserEx.sln
 
-      - name: Build project
-        run: dotnet build --configuration Release  # 编译项目
+    - name: Build Solution
+      run: dotnet build UnConfuserEx.sln -c Release --no-restore
 
-      - name: Publish project to root directory
-        run: dotnet publish --configuration Release --output ${{ github.workspace }}/publish  # 输出到根目录的 'publish' 文件夹
+    - name: Publish Artifacts
+      run: |
+        dotnet publish UnConfuserEx/UnConfuserEx.csproj -c Release -o ./publish
 
-      - name: List publish directory (用于调试)
-        run: dir ${{ github.workspace }}/publish  # 列出 publish 目录中的文件，用于调试
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: UnConfuserEx
+        path: ./publish
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2  # 上传构建文件到 GitHub Actions
-        with:
-          name: unconfuserex-build  # 设置上传的工件名称
-          path: ${{ github.workspace }}/publish/*  # 上传 publish 目录中的所有文件
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ./publish/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
